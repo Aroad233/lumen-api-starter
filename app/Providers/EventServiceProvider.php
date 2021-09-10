@@ -24,5 +24,8 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ExampleEvent::class => [
             \App\Listeners\ExampleListener::class,
         ],
+        \Illuminate\Database\Events\QueryExecuted::class => [
+            \App\Listeners\QueryListener::class
+        ],
     ];
 }
