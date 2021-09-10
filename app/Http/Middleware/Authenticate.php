@@ -16,6 +16,7 @@ use Closure;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class Authenticate
 {
@@ -53,6 +54,27 @@ class Authenticate
             abort(ResponseCodeEnum::HTTP_UNAUTHORIZED);
         }
 
+        return $next($request);
+    }
+
+    /**
+     * Handle an incoming request.
+     *
+     * @param  Request  $request
+     * @param  Closure  $next
+     * @param  string|null  $guard
+     *
+     * @return mixed
+     *
+     * @throws AuthorizationException
+     */
+    public function handle($request, Closure $next, $guard = null)
+    {
+        if ($this->auth->guard($guard)->guest()) {
+            abort(ResponseCodeEnum::HTTP_UNAUTHORIZED);
+        }
+        Log::info($request->url());
+        Log::info($request->all());
         return $next($request);
     }
 }
